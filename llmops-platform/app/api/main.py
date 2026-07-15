@@ -34,6 +34,9 @@ from app.services.metric_service import save_metric
 
 from app.models.evaluation_case import EvaluationCase
 
+from app.schemas.evaluate_rag import EvaluateRAGRequest
+from app.services.rag_evaluation_service import evaluate_rag
+
 app = FastAPI(
     title="Enterprise LLMOps Platform"
 )
@@ -140,3 +143,18 @@ def evaluate(
     )
 
     return result
+
+
+@app.post("/evaluate-rag")
+def evaluate_rag_endpoint(
+    request: EvaluateRAGRequest,
+    db: Session = Depends(get_db)
+):
+
+    return evaluate_rag(
+        db=db,
+        experiment_id=request.experiment_id,
+        question=request.question,
+        expected_output=request.expected_output,
+        department=request.department
+    )

@@ -1,17 +1,47 @@
+import os
+
 from dotenv import load_dotenv
 
 from deepeval.test_case import LLMTestCase
-from deepeval.metrics import AnswerRelevancyMetric
+
+from deepeval.metrics import (
+    AnswerRelevancyMetric,
+    FaithfulnessMetric,
+    ContextualPrecisionMetric,
+    ContextualRelevancyMetric,
+)
 
 load_dotenv()
+
+# Read model name from .env
+MODEL_NAME = os.getenv("GOOGLE_MODEL", "gemini-3.1-flash-lite")
 
 
 def evaluate_case(evaluation_case):
 
-    metric = AnswerRelevancyMetric(
-        model="gemini-2.5-flash",
-        threshold=0.7
-    )
+    metrics = [
+
+        AnswerRelevancyMetric(
+            threshold=0.7,
+            model=MODEL_NAME
+        ),
+
+        FaithfulnessMetric(
+            threshold=0.7,
+            model=MODEL_NAME
+        ),
+
+        ContextualPrecisionMetric(
+            threshold=0.7,
+            model=MODEL_NAME
+        ),
+
+        ContextualRelevancyMetric(
+            threshold=0.7,
+            model=MODEL_NAME
+        )
+
+    ]
 
     test_case = LLMTestCase(
 
@@ -35,18 +65,24 @@ def evaluate_case(evaluation_case):
 
     )
 
-    metric.measure(test_case)
+    results = []
 
-    return {
+    for metric in metrics:
 
-        "metric_name": "Answer Relevancy",
+        metric.measure(test_case)
 
-        "score": metric.score,
+        results.append({
 
-        "passed": metric.success,
+            "metric_name": metric.__class__.__name__,
 
-        "threshold": metric.threshold,
+            "score": metric.score,
 
-        "reason": metric.reason
+            "passed": metric.success,
 
-    }
+            "threshold": metric.threshold,
+
+            "reason": metric.reason
+
+        })
+
+    return results
