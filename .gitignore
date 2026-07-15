@@ -1,0 +1,8 @@
+# Environment
+.env
+
+# Virtual environment
+.venv/
+
+# DeepEval
+.deepeval/

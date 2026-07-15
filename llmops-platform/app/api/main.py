@@ -37,6 +37,8 @@ from app.models.evaluation_case import EvaluationCase
 from app.schemas.evaluate_rag import EvaluateRAGRequest
 from app.services.rag_evaluation_service import evaluate_rag
 
+from app.services.analytics_service import get_experiment_summary
+
 app = FastAPI(
     title="Enterprise LLMOps Platform"
 )
@@ -157,4 +159,16 @@ def evaluate_rag_endpoint(
         question=request.question,
         expected_output=request.expected_output,
         department=request.department
+    )
+
+
+@app.get("/experiments/{experiment_id}/summary")
+def experiment_summary(
+    experiment_id: int,
+    db: Session = Depends(get_db)
+):
+
+    return get_experiment_summary(
+        db=db,
+        experiment_id=experiment_id
     )
