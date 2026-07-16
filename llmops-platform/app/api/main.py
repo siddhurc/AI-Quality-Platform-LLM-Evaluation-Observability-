@@ -44,6 +44,10 @@ from app.services.dataset_evaluation_service import (
     evaluate_dataset as evaluate_dataset_service
 )
 
+from app.schemas.experiment_compare import ExperimentCompareRequest
+
+from app.services.comparison_service import compare_experiments
+
 app = FastAPI(
     title="Enterprise LLMOps Platform"
 )
@@ -199,5 +203,23 @@ def evaluate_dataset_endpoint(
         dataset_name=request.dataset_name,
 
         metric_names=request.metrics
+
+    )
+
+
+@app.post("/experiments/compare")
+def compare(
+
+    request: ExperimentCompareRequest,
+
+    db: Session = Depends(get_db)
+
+):
+
+    return compare_experiments(
+
+        db=db,
+
+        experiment_ids=request.experiment_ids
 
     )
