@@ -48,6 +48,8 @@ from app.schemas.experiment_compare import ExperimentCompareRequest
 
 from app.services.comparison_service import compare_experiments
 
+from app.services.experiment_query_service import get_all_experiments
+
 app = FastAPI(
     title="Enterprise LLMOps Platform"
 )
@@ -223,3 +225,16 @@ def compare(
         experiment_ids=request.experiment_ids
 
     )
+
+
+@app.get(
+    "/experiments",
+    response_model=list[ExperimentResponse]
+)
+def list_experiments(
+
+    db: Session = Depends(get_db)
+
+):
+
+    return get_all_experiments(db)

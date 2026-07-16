@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -19,6 +21,8 @@ class ExperimentResponse(BaseModel):
     model_name: str
 
     prompt_version: str
+
+    created_at: datetime
 
     class Config:
 
