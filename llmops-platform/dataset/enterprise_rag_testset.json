@@ -1,0 +1,12 @@
+[
+    {
+        "question": "What is the GPU usage?",
+        "expected_output": "GPU 0 usage is 6% and GPU 1 usage is 0%.",
+        "department": "operations"
+    },
+    {
+        "question": "What is CPU usage?",
+        "expected_output": "CPU usage is 6%.",
+        "department": "operations"
+    }
+]

@@ -9,10 +9,14 @@ from app.services.metric_service import save_metric
 
 def evaluate_evaluation_case(
     db: Session,
-    evaluation_case: EvaluationCase
+    evaluation_case: EvaluationCase,
+    metric_names: list[str]
 ):
 
-    results = evaluate_case(evaluation_case)
+    results = evaluate_case(
+    evaluation_case,
+    metric_names
+)
 
     for result in results:
 

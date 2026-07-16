@@ -1,15 +1,11 @@
 from pydantic import BaseModel
 
 
-class EvaluateRAGRequest(BaseModel):
+class DatasetEvaluationRequest(BaseModel):
 
     experiment_id: int
 
-    question: str
-
-    expected_output: str
-
-    department: str
+    dataset_name: str
 
     metrics: list[str] = [
         "answer_relevancy",

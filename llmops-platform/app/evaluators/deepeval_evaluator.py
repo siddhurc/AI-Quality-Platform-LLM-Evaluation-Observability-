@@ -17,30 +17,39 @@ load_dotenv()
 MODEL_NAME = os.getenv("GOOGLE_MODEL", "gemini-3.1-flash-lite")
 
 
-def evaluate_case(evaluation_case):
+def evaluate_case(
+    evaluation_case,
+    metric_names: list[str]
+):
+
+    available_metrics = {
+
+    "answer_relevancy": AnswerRelevancyMetric(
+        threshold=0.7,
+        model=MODEL_NAME
+    ),
+
+    "faithfulness": FaithfulnessMetric(
+        threshold=0.7,
+        model=MODEL_NAME
+    ),
+
+    "contextual_precision": ContextualPrecisionMetric(
+        threshold=0.7,
+        model=MODEL_NAME
+    ),
+
+    "contextual_relevancy": ContextualRelevancyMetric(
+        threshold=0.7,
+        model=MODEL_NAME
+    )
+
+    }
 
     metrics = [
-
-        AnswerRelevancyMetric(
-            threshold=0.7,
-            model=MODEL_NAME
-        ),
-
-        FaithfulnessMetric(
-            threshold=0.7,
-            model=MODEL_NAME
-        ),
-
-        ContextualPrecisionMetric(
-            threshold=0.7,
-            model=MODEL_NAME
-        ),
-
-        ContextualRelevancyMetric(
-            threshold=0.7,
-            model=MODEL_NAME
-        )
-
+        available_metrics[name]
+        for name in metric_names
+        if name in available_metrics
     ]
 
     test_case = LLMTestCase(

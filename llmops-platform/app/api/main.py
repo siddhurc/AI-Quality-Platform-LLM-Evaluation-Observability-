@@ -39,6 +39,11 @@ from app.services.rag_evaluation_service import evaluate_rag
 
 from app.services.analytics_service import get_experiment_summary
 
+from app.schemas.dataset_evaluation import DatasetEvaluationRequest
+from app.services.dataset_evaluation_service import (
+    evaluate_dataset as evaluate_dataset_service
+)
+
 app = FastAPI(
     title="Enterprise LLMOps Platform"
 )
@@ -158,7 +163,8 @@ def evaluate_rag_endpoint(
         experiment_id=request.experiment_id,
         question=request.question,
         expected_output=request.expected_output,
-        department=request.department
+        department=request.department,
+        metric_names=request.metrics
     )
 
 
@@ -171,4 +177,27 @@ def experiment_summary(
     return get_experiment_summary(
         db=db,
         experiment_id=experiment_id
+    )
+
+
+
+@app.post("/evaluate-dataset")
+def evaluate_dataset_endpoint(
+
+    request: DatasetEvaluationRequest,
+
+    db: Session = Depends(get_db)
+
+):
+
+    return evaluate_dataset_service(
+
+        db=db,
+
+        experiment_id=request.experiment_id,
+
+        dataset_name=request.dataset_name,
+
+        metric_names=request.metrics
+
     )

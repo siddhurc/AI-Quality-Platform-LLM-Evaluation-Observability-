@@ -13,6 +13,7 @@ def evaluate_rag(
     question: str,
     expected_output: str,
     department: str,
+    metric_names: list[str]
 ):
 
     rag_result = ask_rag(
@@ -47,9 +48,10 @@ def evaluate_rag(
     db.refresh(evaluation_case)
 
     metric_result = evaluate_evaluation_case(
-        db=db,
-        evaluation_case=evaluation_case
-    )
+    db=db,
+    evaluation_case=evaluation_case,
+    metric_names=metric_names
+)
 
     return {
 
